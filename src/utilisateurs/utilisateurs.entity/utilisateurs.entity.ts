@@ -10,6 +10,10 @@ export class Utilisateurs extends BaseEntity{
         nullable: true 
     })
     nom: string;
+    @Column({
+        nullable: true
+    })
+    passe: string
 }
 
 

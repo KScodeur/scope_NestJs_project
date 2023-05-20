@@ -3,6 +3,8 @@ import path from 'path';
 import { CreateUtilisateurDto } from 'src/utilisateurs/dto/create-utilisateurs.dto';
 import { UpdateUtilisateurDto } from 'src/utilisateurs/dto/update-utilisateurs.dto';
 import { UtilisateursService } from './utilisateurs.service';
+import * as bcrypt from 'bcrypt';
+
 
 @Controller('utilisateurs')
 export class UtilisateursController {
@@ -12,16 +14,15 @@ export class UtilisateursController {
     async create(@Body() createUtilisateurDto: CreateUtilisateurDto){
       return await this.userservice.create(createUtilisateurDto)
     }
-    
 
     @Get()
     async findAll(){
         return await this.userservice.findAll();
     }
 
-    @Get(':id')
-    async findOne(@Param('id') id:string){
-      return await this.userservice.findOne(+id)
+    @Get(':nom')
+    async findOne(@Param('nom') nom:string){
+      return await this.userservice.findOne(nom)
     }
 
     @Patch(':id')
