@@ -1,6 +1,7 @@
 import { BadRequestException, Body, Injectable, ParseIntPipe, UnauthorizedException } from '@nestjs/common';
 import { UtilisateursService } from 'src/utilisateurs/utilisateurs.service';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -8,30 +9,18 @@ export class AuthService {
         private utilisateursService : UtilisateursService,
         private jwtService: JwtService){}
 
-    async findOne(nom:string){
-        return await this.utilisateursService.findOne(nom)
-    }
-
-    async signIn(nom:string, passe:string): Promise<any> {
-        const user = await this.utilisateursService.findOne(nom);
-
-        if (user?.passe !== passe) {
-            throw new BadRequestException("mot de passe où nom utilisateur incorrect");
-          }
-
-        /*if (user?.passe !== passe) {
-          throw new BadRequestException();
+    async signIn(nom:string, passe:string){
+        const user = await this.utilisateursService.findOneBy(nom);
+        console.log(user)
+        let verify= await bcrypt.compare(passe, user.passe)
+        if (user.nom === nom && verify){
+            // const { passe, ...result} = user;
+        return user;
         }
-        if(await bcrypt.compare(passe, user.passe)){
-          throw new BadRequestException();
-
-        }*/
-        const payload = { nom: user.nom, sub: user.id };
-        return {
-          access_token: await this.jwtService.signAsync(payload),
-        };
-    
-}
+            else{
+            return 'null';
+            }
+    }
 }
     
 

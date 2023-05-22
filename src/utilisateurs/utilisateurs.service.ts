@@ -30,6 +30,23 @@ export class UtilisateursService {
     }
 
 
+    async findOne(id: number){
+        try{
+            return await this.utilisateurRepository.findOneBy({id:id});
+        }catch(error){
+            console.error();
+            throw new InternalServerErrorException("Failed to find on item")
+        };   
+    }
+    async findOneBy(nom:string){
+        try{
+            return await this.utilisateurRepository.findOneBy({nom:nom});
+        }catch(error){
+            console.error();
+            throw new InternalServerErrorException("Failed to find on item")
+        };
+    }
+    /*
     async findOne(nom: string){
         try{
             return await this.utilisateurRepository.findOneBy({nom});
@@ -37,9 +54,10 @@ export class UtilisateursService {
             console.error();
             throw new InternalServerErrorException("Failed to find on item")
         };
+         }
+        */
         
-        
-    }
+   
     
     async update(id:number, updateUtilisateurDto:UpdateUtilisateurDto){
         try{

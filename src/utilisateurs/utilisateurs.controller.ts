@@ -20,9 +20,9 @@ export class UtilisateursController {
         return await this.userservice.findAll();
     }
 
-    @Get(':nom')
-    async findOne(@Param('nom') nom:string){
-      return await this.userservice.findOne(nom)
+    @Get(':id')
+    async findOne(@Param('id') id:number){
+      return await this.userservice.findOne(+id)
     }
 
     @Patch(':id')
