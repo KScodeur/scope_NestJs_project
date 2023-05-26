@@ -10,6 +10,10 @@ import { LocalStrategy } from './local.strategy';
 import { UtilisateursController } from 'src/utilisateurs/utilisateurs.controller';
 import { Utilisateurs } from 'src/utilisateurs/utilisateurs.entity/utilisateurs.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthGuard } from './auth.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { SetMetadata } from '@nestjs/common';
+
 
 @Module({
   imports: [TypeOrmModule.forFeature([Utilisateurs]),
@@ -20,6 +24,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       signOptions: { expiresIn: '60s' },
     }),],
   controllers: [AuthController,UtilisateursController],
-  providers: [AuthService,UtilisateursService,LocalStrategy]
+  providers: [AuthService,
+    UtilisateursService,
+    LocalStrategy,
+    {provide: APP_GUARD,
+    useClass: AuthGuard},
+  ],
+
+    
 })
 export class AuthModule {}

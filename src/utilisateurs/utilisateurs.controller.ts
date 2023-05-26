@@ -1,10 +1,8 @@
 import { Get, Controller, Post, Patch, Param, Body, Delete, ParseIntPipe } from '@nestjs/common';
-import path from 'path';
 import { CreateUtilisateurDto } from 'src/utilisateurs/dto/create-utilisateurs.dto';
 import { UpdateUtilisateurDto } from 'src/utilisateurs/dto/update-utilisateurs.dto';
 import { UtilisateursService } from './utilisateurs.service';
-import * as bcrypt from 'bcrypt';
-
+import { Public } from 'src/auth/decorator';
 
 @Controller('utilisateurs')
 export class UtilisateursController {
@@ -14,7 +12,7 @@ export class UtilisateursController {
     async create(@Body() createUtilisateurDto: CreateUtilisateurDto){
       return await this.userservice.create(createUtilisateurDto)
     }
-
+    @Public()
     @Get()
     async findAll(){
         return await this.userservice.findAll();

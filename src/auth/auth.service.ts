@@ -10,17 +10,21 @@ export class AuthService {
         private jwtService: JwtService){}
 
     async signIn(nom:string, passe:string){
+        console.log(passe);
+        
         const user = await this.utilisateursService.findOneBy(nom);
-        console.log(user)
         let verify= await bcrypt.compare(passe, user.passe)
-        if (user.nom === nom && verify){
+        if (!verify){
             // const { passe, ...result} = user;
-        return user;
+            throw new UnauthorizedException('Vérifier le nom et le mot de passe')
         }
-            else{
-            return 'null';
-            }
+        const payload = { nom: user.nom, sub: user.id };
+        
+        return {
+            access_token: this.jwtService.sign(payload),
+        }
     }
 }
+
     
 

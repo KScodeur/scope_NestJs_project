@@ -46,19 +46,7 @@ export class UtilisateursService {
             throw new InternalServerErrorException("Failed to find on item")
         };
     }
-    /*
-    async findOne(nom: string){
-        try{
-            return await this.utilisateurRepository.findOneBy({nom});
-        }catch(error){
-            console.error();
-            throw new InternalServerErrorException("Failed to find on item")
-        };
-         }
-        */
         
-   
-    
     async update(id:number, updateUtilisateurDto:UpdateUtilisateurDto){
         try{
         let utilisateur: Utilisateurs = new  Utilisateurs();

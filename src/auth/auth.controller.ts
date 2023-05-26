@@ -1,20 +1,24 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Get, Param} from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Get, Param, UseGuards, Request} from '@nestjs/common';
+import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
-import * as bcrypt from 'bcrypt';
+import { Public } from './decorator';
 
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService){}
 
-        // @HttpCode(HttpStatus.OK)
+        @Public()
+        @HttpCode(HttpStatus.OK)
         @Post()
         async signIn(@Body() signInDto: Record<string, any>) {
-          return await this.authService.signIn(signInDto.nom,signInDto.passe);
+         return await this.authService.signIn(signInDto.nom,signInDto.passe);
         }
         
-        // @Get(':id')
-        // async findOne(@Param('id') id:number){
-        // return await this.authService.findOne(id)
-        // }
+        @UseGuards(AuthGuard)
+        @Get('profile')
+        getProfile(@Request() req) {
+          return req.user;
+        }
+
 }
 
