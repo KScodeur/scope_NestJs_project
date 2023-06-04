@@ -13,11 +13,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthGuard } from './auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { SetMetadata } from '@nestjs/common';
+import { EventsModule } from 'src/events/events.module';
 
 
 @Module({
   imports: [TypeOrmModule.forFeature([Utilisateurs]),
     PassportModule,
+    EventsModule,
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,

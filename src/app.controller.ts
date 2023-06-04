@@ -18,8 +18,8 @@ export class AppController {
   @Public()
   @Post('auth/login')
   async login(@Request() req) {
-    console.log(req.nom);
+    console.log(req);
     
-    return await this.authService.signIn(req.nom, req.passe);
+    return await this.authService.signIn(req.body.nom, req.body.passe);
   }
 }

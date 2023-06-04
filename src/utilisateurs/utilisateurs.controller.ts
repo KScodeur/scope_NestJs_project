@@ -8,6 +8,8 @@ import { Public } from 'src/auth/decorator';
 export class UtilisateursController {
     constructor(private readonly userservice: UtilisateursService){}
 
+
+    @Public()
     @Post()
     async create(@Body() createUtilisateurDto: CreateUtilisateurDto){
       return await this.userservice.create(createUtilisateurDto)

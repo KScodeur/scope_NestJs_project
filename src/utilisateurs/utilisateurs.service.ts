@@ -32,7 +32,7 @@ export class UtilisateursService {
 
     async findOne(id: number){
         try{
-            return await this.utilisateurRepository.findOneBy({id:id});
+            return await this.utilisateurRepository.findOneBy({utilisateur_id:id});
         }catch(error){
             console.error();
             throw new InternalServerErrorException("Failed to find on item")
@@ -53,7 +53,7 @@ export class UtilisateursService {
         let hash = await bcrypt.hash(updateUtilisateurDto.passe, 12)
         utilisateur.nom = updateUtilisateurDto.nom
         utilisateur.passe = hash
-        utilisateur.id = id
+        utilisateur.utilisateur_id = id
         return await this.utilisateurRepository.save(utilisateur);
         }catch{
             console.error();
