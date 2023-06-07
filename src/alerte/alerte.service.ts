@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAlerteDto } from './dto/create-alerte.dto';
@@ -12,23 +12,45 @@ export class AlerteService {
     private readonly alerteRepository: Repository<Alerte>
   ){ }
 
-  create(createAlerteDto: CreateAlerteDto) {
-    return 'This action adds a new alerte';
+  async create(createAlerteDto: CreateAlerteDto, utilisateur_id:any) {
+    try{
+      let alerte = new Alerte()
+      alerte.statut_alerte = createAlerteDto.statut_alerte
+      return await this.alerteRepository.save(alerte, utilisateur_id)
+    }catch(e){
+      throw new InternalServerErrorException()
+    }
+   
   }
 
-  findAll() {
-    return `This action returns all alerte`;
+  async findAll():Promise<Alerte[]>{
+    return await this.alerteRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} alerte`;
+  async findOne(id:number) {
+    try{
+      return await this.alerteRepository.findOneBy({alerte_id:id})
+    }catch(e){
+      throw new InternalServerErrorException()
+    }
   }
 
-  update(id: number, updateAlerteDto: UpdateAlerteDto) {
-    return `This action updates a #${id} alerte`;
+  async update(id: number, updateAlerteDto: UpdateAlerteDto) {
+    try{
+      let alerte = new Alerte()
+      alerte.statut_alerte = updateAlerteDto.statut_alerte
+      return await this.alerteRepository.save(alerte)
+    }catch(e){
+      throw new InternalServerErrorException()
+    }
   }
 
   remove(id: number) {
-    return `This action removes a #${id} alerte`;
+    try{
+      return this.alerteRepository.delete(id);
+    }catch{
+        console.error();
+        throw new InternalServerErrorException("Failed to delete")
+    }
   }
 }

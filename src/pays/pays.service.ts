@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePayDto } from './dto/create-pay.dto';
@@ -11,23 +11,46 @@ export class PaysService {
     @InjectRepository(Pay)
     private readonly paysRepository: Repository<Pay>
   ){ }
-  create(createPayDto: CreatePayDto) {
-    return 'This action adds a new pay';
+  async create(createpayDto: CreatePayDto):Promise<Pay> {
+    try{
+      let pays = new Pay()
+      pays.nom_pays = createpayDto.nom_pays
+      return await this.paysRepository.save(pays)
+    }catch(e){
+      throw new InternalServerErrorException()
+    }
   }
 
-  findAll() {
-    return `This action returns all pays`;
+  async findAll():Promise<Pay[]>{
+    return await this.paysRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} pay`;
+  async findOne(id:number) {
+    try{
+      return await this.paysRepository.findOneBy({pays_id:id})
+    }catch(e){
+      throw new InternalServerErrorException()
+    }
   }
 
-  update(id: number, updatePayDto: UpdatePayDto) {
-    return `This action updates a #${id} pay`;
+  async update(id: number, updatePayDto: UpdatePayDto) {
+    try{
+      let pays = new Pay()
+      pays.nom_pays = updatePayDto.nom_pays
+      pays.pays_id = id
+      return await this.paysRepository.save(pays)
+    }catch(e){
+      throw new InternalServerErrorException()
+    }
   }
 
   remove(id: number) {
-    return `This action removes a #${id} pay`;
+    try{
+      return this.paysRepository.delete(id);
+    }catch{
+        console.error();
+        throw new InternalServerErrorException("Failed to delete")
+    }
+  
   }
 }

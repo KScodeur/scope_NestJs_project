@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Public } from 'src/auth/decorator';
 import { CollecteurService } from './collecteur.service';
 import { CreateCollecteurDto } from './dto/create-collecteur.dto';
 import { UpdateCollecteurDto } from './dto/update-collecteur.dto';
@@ -12,23 +13,24 @@ export class CollecteurController {
     return this.collecteurService.create(createCollecteurDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.collecteurService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.collecteurService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCollecteurDto: UpdateCollecteurDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateCollecteurDto: UpdateCollecteurDto) {
     return this.collecteurService.update(+id, updateCollecteurDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.collecteurService.remove(+id);
   }
 }

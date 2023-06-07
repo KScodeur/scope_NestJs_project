@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateQuartierDto } from './dto/create-quartier.dto';
@@ -11,23 +11,46 @@ export class QuartierService {
     @InjectRepository(Quartier)
     private readonly quartierRepository: Repository<Quartier>
   ){ }
-  create(createQuartierDto: CreateQuartierDto) {
-    return 'This action adds a new quartier';
+  async create(createQuartierDto: CreateQuartierDto):Promise<Quartier> {
+    try{
+      let quartier = new Quartier()
+      quartier.nom_quartier = createQuartierDto.nom_quartier
+      return await this.quartierRepository.save(quartier)
+    }catch(e){
+      throw new InternalServerErrorException()
+    }
   }
 
-  findAll() {
-    return `This action returns all quartier`;
+  async findAll():Promise<Quartier[]>{
+    return await this.quartierRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} quartier`;
+  async findOne(id:number) {
+    try{
+      return await this.quartierRepository.findOneBy({quartier_id:id})
+    }catch(e){
+      throw new InternalServerErrorException()
+    }
   }
 
-  update(id: number, updateQuartierDto: UpdateQuartierDto) {
-    return `This action updates a #${id} quartier`;
+  async update(id: number, updateQuartierDto: UpdateQuartierDto) {
+    try{
+      let quartier = new Quartier()
+      quartier.nom_quartier = updateQuartierDto.nom_quartier
+      quartier.quartier_id = id
+      return await this.quartierRepository.save(quartier)
+    }catch(e){
+      throw new InternalServerErrorException()
+    }
   }
 
   remove(id: number) {
-    return `This action removes a #${id} quartier`;
+    try{
+      return this.quartierRepository.delete(id);
+    }catch{
+        console.error();
+        throw new InternalServerErrorException("Failed to delete")
+    }
+  
   }
 }

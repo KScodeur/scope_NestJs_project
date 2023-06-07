@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { AlerteService } from './alerte.service';
 import { CreateAlerteDto } from './dto/create-alerte.dto';
 import { UpdateAlerteDto } from './dto/update-alerte.dto';
@@ -7,9 +8,12 @@ import { UpdateAlerteDto } from './dto/update-alerte.dto';
 export class AlerteController {
   constructor(private readonly alerteService: AlerteService) {}
 
+
+  @UseGuards(AuthGuard)
   @Post()
-  create(@Body() createAlerteDto: CreateAlerteDto) {
-    return this.alerteService.create(createAlerteDto);
+  create(@Body() createAlerteDto: CreateAlerteDto, @Request() req) {
+    const utilisateur_id = req.user["utilisateur_id"]
+    return this.alerteService.create(createAlerteDto, utilisateur_id);
   }
 
   @Get()

@@ -7,9 +7,6 @@ export class Alerte extends BaseEntity{
     alerte_id:number
 
     @Column()
-    date: Date
-
-    @Column()
     statut_alerte:string
 
     @CreateDateColumn()

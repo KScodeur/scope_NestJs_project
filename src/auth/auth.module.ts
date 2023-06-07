@@ -12,7 +12,6 @@ import { Utilisateurs } from 'src/utilisateurs/utilisateurs.entity/utilisateurs.
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthGuard } from './auth.guard';
 import { APP_GUARD } from '@nestjs/core';
-import { SetMetadata } from '@nestjs/common';
 import { EventsModule } from 'src/events/events.module';
 
 
